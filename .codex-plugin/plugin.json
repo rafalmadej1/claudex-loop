@@ -1,6 +1,6 @@
 {
   "name": "claudex-loop",
-  "description": "Standalone model routing and one-off handoffs with Claudex Route, plus the full Claudex Loop planning, build and review workflow.",
+  "description": "Claudex Route model routing, legacy Claude Code/Codex CLI compatibility skills, and the Antigravity-based Claudex Loop workflow.",
   "author": {
     "name": "Chase AI",
     "url": "https://youtube.com/@chaseai"
@@ -9,7 +9,7 @@
   "license": "MIT",
   "keywords": [
     "planning",
-    "codex",
+    "antigravity",
     "cross-model",
     "adversarial-review",
     "skills"
@@ -19,8 +19,8 @@
   "repository": "https://github.com/chaseai-yt/claudex-loop",
   "interface": {
     "displayName": "Claudex Loop",
-    "shortDescription": "Route tasks, plan, build and review across models",
-    "longDescription": "Use standalone Claudex Route to choose a model and make one scoped handoff, or Claudex Loop for the full planning, build and independent review workflow.",
+    "shortDescription": "Plan and implement with independent Antigravity reviews",
+    "longDescription": "Use Claudex Loop in Antigravity for Gemini planning and development, independent Claude Opus approval, and one-change-at-a-time code reviews. Claudex Route remains a standalone model-routing skill.",
     "developerName": "Chase AI",
     "category": "Productivity",
     "capabilities": [
@@ -30,7 +30,7 @@
     ],
     "websiteURL": "https://github.com/chaseai-yt/claudex-loop",
     "defaultPrompt": [
-      "Use claudex-loop to harden this plan with independent review."
+      "Use claudex-loop in Antigravity: plan with Gemini 4 Argon, get Claude Opus 5.5 approval, then implement one change at a time with a fresh Opus review."
     ]
   }
 }

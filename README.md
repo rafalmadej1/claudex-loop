@@ -81,7 +81,7 @@ Antigravity must provide the specified models and thinking modes for the full Cl
 /plugin install claudex-loop@claudex-loop
 ```
 
-Use `/claudex-loop:claudex-route` for a lightweight recommendation or one-off handoff, or `/claudex-loop:claudex-loop`, `/claudex-loop:codex-review`, or `/claudex-loop:codex-build` for the existing workflows. Enable marketplace auto-update in the plugin menu if desired.
+Use `/claudex-loop:claudex-route` for a lightweight recommendation or one-off handoff. The packaged `codex-review` and `codex-build` skills are legacy CLI compatibility commands. Run the main `claudex-loop` workflow from Antigravity after installing it as a workspace skill. Enable marketplace auto-update in the plugin menu if desired.
 
 ### Codex or manual skill installation
 
@@ -111,7 +111,7 @@ Copy-Item -Recurse -Force skills\* "$env:USERPROFILE\.agents\skills\"
 Copy-Item -Recurse -Force skills\* "$env:USERPROFILE\.claude\skills\"
 ```
 
-Open a new session to pick up the skills. In Antigravity, invoke the installed `claudex-loop` skill for the full workflow. In Codex, invoke `$claudex-route` or the explicit compatibility commands; in Claude Code, invoke `/claudex-route` or those compatibility commands. Updates are `git pull` and re-copy. A `.codex-plugin/plugin.json` is also supplied for Codex plugin packaging; manual skill installation does not require adding a marketplace.
+Open a new Antigravity session to pick up the skill and invoke `claudex-loop` for the full workflow. In Codex, invoke `$claudex-route` or the explicit compatibility commands; in Claude Code, invoke `/claudex-route` or those compatibility commands. Updates are `git pull` and re-copy. A `.codex-plugin/plugin.json` is also supplied for Codex plugin packaging; manual skill installation does not require adding a marketplace.
 
 ### Examples
 
@@ -142,7 +142,7 @@ The first two examples use the main Antigravity workflow. The latter examples ar
 
 Plan approval applies only to the exact reviewed plan; any plan edit requires re-approval. Each code review applies only to the change snapshot supplied to that fresh reviewer. Later edits need another review before implementation continues.
 
-A clean structured result does not prove the model is right. The log preserves coverage, limitations and concrete evidence. Zero findings is valid; a large number of findings is not a quality score. `BLOCKED`, execution failures and exhausted round budgets are surfaced rather than converted to approval.
+A review approval is not proof of exhaustive correctness. The log preserves coverage, limitations, and concrete evidence. Zero findings is valid; a large number of findings is not a quality score. `BLOCKED` and failed reviews are surfaced rather than converted to approval.
 
 The legacy shared CLI runner's approval and sandbox guarantees apply only to its Claude Code/Codex compatibility commands. It cannot launch or enforce Antigravity sessions; follow the [Antigravity workflow contract](skills/claudex-loop/references/antigravity.md) for the main workflow.
 

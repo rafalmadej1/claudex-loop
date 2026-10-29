@@ -1,16 +1,16 @@
 ---
 name: codex-review
-description: "Have Codex independently review an existing implementation plan while Claude coordinates a bounded revision loop. For automatic reviewer selection from either host, use claudex-loop with mode=review."
+description: "Legacy Claude Code/Codex CLI compatibility command for reviewing an existing plan; the main Claudex Loop workflow uses Antigravity."
 ---
 
 # Codex Review
 
-Compatibility entry point: explicitly use Codex as the plan reviewer. The shared workflow and executable live in the sibling `claudex-loop` skill; install that skill alongside this one.
+Legacy compatibility entry point: explicitly use Codex as the plan reviewer in the Claude Code/Codex CLI workflow. This command is separate from the main Antigravity workflow and does not satisfy its plan-approval or per-change review gates.
 
-In Claude Code, load [claudex-loop](../claudex-loop/SKILL.md) and start at `mode=review`, `host=claude`, reviewer Codex. Preserve `PLAN_FILE`, `LOG_FILE`, `MAX_ROUNDS` / `rounds`, and explicit model/effort arguments. The invocation authorizes reviewing, not implementation. Do not restart an interview when the supplied plan is already adequate.
+In Claude Code, use the shared CLI runner with `review --host claude` to ask Codex to review the supplied plan. Preserve the plan path, log path, round cap, and explicit model/effort arguments. The invocation authorizes reviewing, not implementation. Do not restart an interview when the supplied plan is already adequate.
 
-In Codex, explain that this explicit command would use the same provider for planning and review. Use the shared `claudex-loop mode=review` workflow with Claude as the independent reviewer unless the user specifically requested same-provider review. If they did, perform and label that as ordinary Codex review; do not claim cross-provider approval or use the cross-provider approval runner to certify it.
+In Codex, explain that this explicit command would use the same provider for planning and review. Use an ordinary Codex review only if the user requested same-provider review; do not claim cross-provider approval.
 
-Read the shared [runtime reference](../claudex-loop/references/runtime.md). Resolve the runner from the installed sibling skill, not the target repository. Use the actual resolved plan path on every round and build handoff. A valid completed result and APPROVED verdict are both required; failed, empty, blocked or malformed results are not approval. The host logs findings and dispositions, and stops at the round cap.
+Read the shared [runtime reference](../claudex-loop/references/runtime.md). Resolve the runner from the installed sibling skill, not the target repository. A valid completed result and `APPROVED` verdict are both required; failed, empty, blocked, or malformed results are not approval. The host logs findings and dispositions and stops at the round cap.
 
-If implementation follows, use the shared build/inspection phase. An independent plan review does not replace independent review of the final code.
+If implementation follows this legacy workflow, use its corresponding build/inspection process. This does not replace the required Antigravity workflow when invoked through `claudex-loop`.
