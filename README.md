@@ -1,7 +1,7 @@
 <div align="center">
 <img src="assets/logo.svg" alt="AGY LOOP" width="719">
 
-### Agent workflow skills for Antigravity, Claude Code, and Codex.
+### Multimodels agent workflow skills for Antigravity.
 
 [![Stars](https://img.shields.io/github/stars/chaseai-yt/claudex-loop?style=flat&color=e8590c)](https://github.com/chaseai-yt/claudex-loop/stargazers)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
