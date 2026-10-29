@@ -49,15 +49,16 @@ Claudex Route runs independently. Use **Claudex Loop** when you want repeated pl
 
 ```mermaid
 flowchart LR
-    R[Host scouts code and context] --> Q[Settle material decisions]
-    Q --> P[Write plan and acceptance checks]
-    P --> V[Other provider reviews]
-    V -- Revise --> A[Host arbitrates and updates]
-    A --> V
-    V -- Approved --> B[Authorized builder implements]
-    B --> T[Run proof checks]
-    T --> I[Other provider inspects final code]
-    I --> H[Present diff and remaining findings]
+    R[Gemini 4 Argon: inspect code and all available agents/skills] --> P[Write per-function plan and tests]
+    P --> V[Fresh Claude Opus 5.5: review plan]
+    V -- Revise --> P
+    V -- Approved --> D[Gemini 3.8 Flash: make one planned change]
+    D --> T[Run that change's test]
+    T --> C[New Claude Opus 5.5: review change]
+    C -- Revise --> D
+    C -- Approved --> N{More planned changes?}
+    N -- Yes --> D
+    N -- No --> F[Run full proof and inspect final diff]
 ```
 
 1. **Recon:** inspect relevant code and tests. Inventory and use every agent and skill available in the developer environment, including workspace-local `.agent` content; record any invocation limitations.
@@ -66,7 +67,7 @@ flowchart LR
 4. **Incremental implementation:** Gemini 3.8 Flash makes one planned change and runs its named test. A new Claude Opus 5.5 instance reviews that change. The developer waits for approval before making the next change. Revisions receive another fresh review.
 5. **Final verification:** run full proof commands and inspect the complete diff after all changes pass their individual reviews.
 
-The user controls consequential decisions and authorization. A request to review a plan does not authorize implementation. A request to plan and implement does not need redundant build approval. Commits, pushes and publication follow the user's existing instructions.
+The user controls consequential decisions and authorization. A request to review a plan does not authorize implementation. A request to plan and implement authorizes implementation after the required independent plan approval; no extra user build sign-off is needed unless a material decision remains. Commits, pushes and publication follow the user's existing instructions.
 
 `PLAN.md` records what to build; `PLAN-REVIEW-LOG.md` records agent/skill inventory, findings, dispositions, model/mode selections, per-change tests and reviews, proof, and remaining uncertainty. Both paths are configurable.
 
@@ -83,7 +84,7 @@ Antigravity must provide the specified models and thinking modes for the full Cl
 
 Use `/claudex-loop:claudex-route` for a lightweight recommendation or one-off handoff. The packaged `codex-review` and `codex-build` skills are legacy CLI compatibility commands. Run the main `claudex-loop` workflow from Antigravity after installing it as a workspace skill. Enable marketplace auto-update in the plugin menu if desired.
 
-### Codex or manual skill installation
+### Antigravity, Codex, or manual skill installation
 
 Clone this repository and copy the skill directories you need. The legacy compatibility commands share the CLI runtime inside `claudex-loop`; copying an alias alone is insufficient. `claudex-route` can also be installed on its own.
 
@@ -154,7 +155,7 @@ python scripts/validate.py
 python -m unittest discover -s tests -v
 ```
 
-CI runs on Windows, macOS and Linux. Tests cover host routing, both result formats, resumed-session identity, malformed/empty/failed responses, timeout handling, approval invalidation, complete change manifests, and build resumption. Tests use disposable Git repositories and fake CLI processes, without model quota. Live CLI smoke-test results are recorded in [VALIDATION.md](VALIDATION.md).
+CI runs on Windows, macOS and Linux. Existing automated tests cover the legacy shared CLI runner's host routing, result formats, resumed-session identity, malformed/empty/failed responses, timeout handling, approval invalidation, complete change manifests, and build resumption. Tests use disposable Git repositories and fake CLI processes, without model quota. Live CLI smoke-test results are recorded in [VALIDATION.md](VALIDATION.md).
 
 ## History and credits
 

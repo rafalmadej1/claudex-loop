@@ -37,6 +37,7 @@ The fixture checks exercise transport and obvious-defect detection, not comparat
 
 ## Limits
 
+- The Antigravity role sequence is specified by the skill and is not launched or enforced by the legacy CLI runner. The required models, thinking modes, agent/skill inventory, and fresh-instance review gates have not been live-tested in Antigravity.
 - Live review tests were run on Windows. Automated fake-CLI coverage is configured for all three operating systems.
 - CLI versions, account access and permission behavior can change; diagnostics identify the selected executable and requested model.
 - Codex's shell sandbox does not constrain external MCP side effects; review existing tool configuration as described in the runtime reference. Claude's adapter instead removes non-reading tools and MCP from the reviewer.
