@@ -1,6 +1,6 @@
 {
-  "name": "claudex-loop",
-  "description": "Claudex Route model routing, legacy Claude Code/Codex CLI compatibility skills, and the Antigravity-based Claudex Loop workflow.",
+  "name": "agy-loop",
+  "description": "Claudex Route model routing, legacy Claude Code/Codex CLI compatibility skills, and the Antigravity-based AGY Loop workflow.",
   "author": {
     "name": "Chase AI",
     "url": "https://youtube.com/@chaseai"
@@ -18,9 +18,9 @@
   "skills": "./skills/",
   "repository": "https://github.com/chaseai-yt/claudex-loop",
   "interface": {
-    "displayName": "Claudex Loop",
+    "displayName": "AGY Loop",
     "shortDescription": "Plan and implement with independent Antigravity reviews",
-    "longDescription": "Use Claudex Loop in Antigravity for Gemini planning and development, independent Claude Opus approval, and one-change-at-a-time code reviews. Claudex Route remains a standalone model-routing skill.",
+    "longDescription": "Use AGY Loop in Antigravity for Gemini planning and development, independent Claude Opus approval, and one-change-at-a-time code reviews. Claudex Route remains a standalone model-routing skill.",
     "developerName": "Chase AI",
     "category": "Productivity",
     "capabilities": [
@@ -30,7 +30,7 @@
     ],
     "websiteURL": "https://github.com/chaseai-yt/claudex-loop",
     "defaultPrompt": [
-      "Use claudex-loop in Antigravity: plan with Gemini 4 Argon, get Claude Opus 5.5 approval, then implement one change at a time with a fresh Opus review."
+      "Use agy-loop in Antigravity: plan with Gemini 4 Argon, get Claude Opus 5.5 approval, then implement one change at a time with a fresh Opus review."
     ]
   }
 }

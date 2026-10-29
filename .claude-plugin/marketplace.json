@@ -1,14 +1,14 @@
 {
-  "name": "claudex-loop",
+  "name": "agy-loop",
   "owner": {
     "name": "Chase AI",
     "url": "https://youtube.com/@chaseai"
   },
   "plugins": [
     {
-      "name": "claudex-loop",
+      "name": "agy-loop",
       "source": "./",
-      "description": "Claudex Route model routing, legacy Claude Code/Codex CLI compatibility skills, and the Antigravity-based Claudex Loop workflow."
+      "description": "Claudex Route model routing, legacy Claude Code/Codex CLI compatibility skills, and the Antigravity-based AGY Loop workflow."
     }
   ]
 }

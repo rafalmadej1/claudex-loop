@@ -1,6 +1,6 @@
-# Antigravity workflow contract
+# AGY Loop Antigravity workflow contract
 
-This reference defines the required handoffs for the main Claudex Loop workflow. The selected role, model, and thinking mode are fixed:
+This reference defines the required handoffs for the main AGY Loop workflow. The selected role, model, and thinking mode are fixed:
 
 | Stage | Antigravity instance | Model | Thinking |
 |---|---|---|---|

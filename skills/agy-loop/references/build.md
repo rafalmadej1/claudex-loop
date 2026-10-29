@@ -1,6 +1,6 @@
 # Build and final inspection
 
-Resolve the shared runner from the installed claudex-loop skill. Keep the spec and run artifacts available to both providers. Preserve user-selected toolchains and carry exact acceptance criteria and proof commands into the build.
+Resolve the shared runner from the installed agy-loop skill. Keep the spec and run artifacts available to both providers. Preserve user-selected toolchains and carry exact acceptance criteria and proof commands into the build.
 
 ## Preparation
 

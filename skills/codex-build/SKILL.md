@@ -1,13 +1,13 @@
 ---
 name: codex-build
-description: "Legacy Claude Code/Codex CLI compatibility command for building an approved work order; the main Claudex Loop workflow uses Antigravity."
+description: "Legacy Claude Code/Codex CLI compatibility command for building an approved work order; the main AGY Loop workflow uses Antigravity."
 ---
 
 # Codex Build
 
 Legacy compatibility entry point: the builder is explicitly Codex. This command uses the shared CLI runner and is separate from the main Antigravity workflow. It does not satisfy the required Gemini developer role or one-change/one-Opus-review gates.
 
-Load the shared [build reference](../claudex-loop/references/build.md) and [runtime reference](../claudex-loop/references/runtime.md). Preserve `SPEC_FILE` (mapped to the runner's `--plan`), `LOG_FILE`, `PROOF_CMD`, `MAX_FIX_ROUNDS`, and explicit model/effort arguments. The spec may have any filename; never substitute `PLAN.md` silently.
+Load the shared [build reference](../agy-loop/references/build.md) and [runtime reference](../agy-loop/references/runtime.md). Preserve `SPEC_FILE` (mapped to the runner's `--plan`), `LOG_FILE`, `PROOF_CMD`, `MAX_FIX_ROUNDS`, and explicit model/effort arguments. The spec may have any filename; never substitute `PLAN.md` silently.
 
 - In Claude Code, Claude coordinates and delegates implementation to Codex through the runner's `build --host claude --builder codex` path. Claude then inspects all changes and independently runs proof checks. Log evidence and limitations. A fresh Claude CLI inspector is also available through the shared runner if useful.
 - In Codex, implement in the current host session with its normal tools, then use a fresh Claude inspector through `inspect --host codex --builder codex`. Do not ask Codex to certify its own changes as independent review.

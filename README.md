@@ -1,5 +1,5 @@
 <div align="center">
-<img src="assets/logo.svg" alt="CLAUDEX LOOP" width="719">
+<img src="assets/logo.svg" alt="AGY LOOP" width="719">
 
 ### Agent workflow skills for Antigravity, Claude Code, and Codex.
 
@@ -7,18 +7,18 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 </div>
 
-This repository contains separate skills for choosing a model, making a one-off handoff, and running a complete development workflow. The main Claudex Loop workflow uses Antigravity with a fixed Gemini/Claude role pairing. Standalone Claude Code/Codex compatibility commands remain available; **Claudex Route is independent of Claudex Loop**.
+This repository contains separate skills for choosing a model, making a one-off handoff, and running a complete development workflow. The main AGY Loop workflow uses Antigravity with a fixed Gemini/Claude role pairing. Standalone Claude Code/Codex compatibility commands remain available; **Claudex Route is independent of AGY Loop**.
 
 | Skill | Use it for | Dependencies |
 |---|---|---|
 | [`claudex-route`](skills/claudex-route/SKILL.md) | A model recommendation or one scoped handoff | Self-contained; selected CLI needed only for delegation |
-| [`claudex-loop`](skills/claudex-loop/SKILL.md) | Antigravity planning, independent plan approval, and one-change-at-a-time implementation/review | Antigravity with the specified models |
+| [`agy-loop`](skills/agy-loop/SKILL.md) | Antigravity planning, independent plan approval, and one-change-at-a-time implementation/review | Antigravity with the specified models |
 | [`codex-review`](skills/codex-review/SKILL.md) | Legacy Claude Code/Codex CLI plan-review compatibility command | Shared CLI runner, Claude Code, and Codex |
 | [`codex-build`](skills/codex-build/SKILL.md) | Legacy Claude Code/Codex CLI build compatibility command | Shared CLI runner, Claude Code, and Codex |
 
-## Claudex Loop
+## AGY Loop
 
-Claudex Loop uses dedicated Antigravity roles. Gemini 4 Argon (high thinking) plans; a separate Claude Opus 5.5 (medium thinking) instance approves the plan; Gemini 3.8 Flash (high thinking) implements it. Each developer change is reviewed by a new Claude Opus 5.5 (medium thinking) instance before the next change begins.
+AGY Loop uses dedicated Antigravity roles. Gemini 4 Argon (high thinking) plans; a separate Claude Opus 5.5 (medium thinking) instance approves the plan; Gemini 3.8 Flash (high thinking) implements it. Each developer change is reviewed by a new Claude Opus 5.5 (medium thinking) instance before the next change begins.
 
 | Stage | Antigravity role | Model | Thinking |
 |---|---|---|---|
@@ -27,7 +27,7 @@ Claudex Loop uses dedicated Antigravity roles. Gemini 4 Argon (high thinking) pl
 | Implementation | Developer | Gemini 3.8 Flash | High |
 | Each change review | New reviewer instance for that change | Claude Opus 5.5 | Medium |
 
-The plan must name every file and function to edit, specify the expected output/observable behavior of each function, and map each function to a covering test. The developer makes one independently reviewable change, runs its named test, then waits for a fresh Opus review before continuing. Corrections also require a new review instance. See the [complete Antigravity workflow contract](skills/claudex-loop/references/antigravity.md).
+The plan must name every file and function to edit, specify the expected output/observable behavior of each function, and map each function to a covering test. The developer makes one independently reviewable change, runs its named test, then waits for a fresh Opus review before continuing. Corrections also require a new review instance. See the [complete Antigravity workflow contract](skills/agy-loop/references/antigravity.md).
 
 Use the required model and thinking mode at every stage. If Antigravity cannot select or verify one, stop and report the blocker; do not silently substitute another model, mode, provider, or CLI.
 
@@ -43,9 +43,9 @@ claudex-route: Pick a suitable model and have it diagnose this failing test read
 
 For example, Luna may suit a focused fixture-generation task, Sol a bounded implementation, and Astra or Fable a difficult review. These are task-fit recommendations, not a fixed ranking; available models, context, verification, and current pricing matter. Staying with your current model is a valid result. Route is a self-contained instruction skill with no Python dependency; a delegated run requires the selected CLI and account access. It does not use the full loop's approval-binding runner.
 
-Claudex Route runs independently. Use **Claudex Loop** when you want repeated plan review, implementation, and independent inspection.
+Claudex Route runs independently. Use **AGY Loop** when you want repeated plan review, implementation, and independent inspection.
 
-## The Claudex Loop workflow
+## The AGY Loop workflow
 
 ```mermaid
 flowchart LR
@@ -73,22 +73,22 @@ The user controls consequential decisions and authorization. A request to review
 
 ## Install
 
-Antigravity must provide the specified models and thinking modes for the full Claudex Loop workflow. The separate legacy CLI compatibility commands require Claude Code, Codex, and Python **3.10+**; they do not enforce the Antigravity workflow.
+Antigravity must provide the specified models and thinking modes for the full AGY Loop workflow. The separate legacy CLI compatibility commands require Claude Code, Codex, and Python **3.10+**; they do not enforce the Antigravity workflow.
 
 ### Claude Code plugin
 
 ```text
 /plugin marketplace add chaseai-yt/claudex-loop
-/plugin install claudex-loop@claudex-loop
+/plugin install agy-loop@agy-loop
 ```
 
-Use `/claudex-loop:claudex-route` for a lightweight recommendation or one-off handoff. The packaged `codex-review` and `codex-build` skills are legacy CLI compatibility commands. Run the main `claudex-loop` workflow from Antigravity after installing it as a workspace skill. Enable marketplace auto-update in the plugin menu if desired.
+Use `/agy-loop:claudex-route` for a lightweight recommendation or one-off handoff. The packaged `codex-review` and `codex-build` skills are legacy CLI compatibility commands. Run the main `agy-loop` workflow from Antigravity after installing it as a workspace skill. Enable marketplace auto-update in the plugin menu if desired.
 
 ### Antigravity, Codex, or manual skill installation
 
-Clone this repository and copy the skill directories you need. The legacy compatibility commands share the CLI runtime inside `claudex-loop`; copying an alias alone is insufficient. `claudex-route` can also be installed on its own.
+Clone this repository and copy the skill directories you need. The legacy compatibility commands share the CLI runtime inside `agy-loop`; copying an alias alone is insufficient. `claudex-route` can also be installed on its own.
 
-For Antigravity, install `skills/claudex-loop/` as a workspace skill under `.agent/skills/claudex-loop/` so its `SKILL.md` and `references/` are available to the planner and developer. Keep `.agent` instructions and available skills in scope for the planner's required inventory.
+For Antigravity, install `skills/agy-loop/` as a workspace skill under `.agent/skills/agy-loop/` so its `SKILL.md` and `references/` are available to the planner and developer. Keep `.agent` instructions and available skills in scope for the planner's required inventory.
 
 To install **only Claudex Route**, copy `skills/claudex-route/` into `~/.agents/skills/` for Codex or `~/.claude/skills/` for Claude Code. No other skill from this repository is required. The commands below install the complete collection into both hosts.
 
@@ -101,8 +101,8 @@ cp -R skills/. ~/.claude/skills/
 
 ```bash
 # Antigravity — run from the project workspace
-mkdir -p .agent/skills/claudex-loop
-cp -R /path/to/claudex-loop/skills/claudex-loop/. .agent/skills/claudex-loop/
+mkdir -p .agent/skills/agy-loop
+cp -R /path/to/claudex-loop/skills/agy-loop/. .agent/skills/agy-loop/
 ```
 
 ```powershell
@@ -112,13 +112,13 @@ Copy-Item -Recurse -Force skills\* "$env:USERPROFILE\.agents\skills\"
 Copy-Item -Recurse -Force skills\* "$env:USERPROFILE\.claude\skills\"
 ```
 
-Open a new Antigravity session to pick up the skill and invoke `claudex-loop` for the full workflow. In Codex, invoke `$claudex-route` or the explicit compatibility commands; in Claude Code, invoke `/claudex-route` or those compatibility commands. Updates are `git pull` and re-copy. A `.codex-plugin/plugin.json` is also supplied for Codex plugin packaging; manual skill installation does not require adding a marketplace.
+Open a new Antigravity session to pick up the skill and invoke `agy-loop` for the full workflow. In Codex, invoke `$claudex-route` or the explicit compatibility commands; in Claude Code, invoke `/claudex-route` or those compatibility commands. Updates are `git pull` and re-copy. A `.codex-plugin/plugin.json` is also supplied for Codex plugin packaging; manual skill installation does not require adding a marketplace.
 
 ### Examples
 
 ```text
-claudex this feature in Antigravity — plan and implement it using the required roles
-claudex this plan in Antigravity, plan=docs/migration.md
+agy-loop this feature in Antigravity — plan and implement it using the required roles
+agy-loop this plan in Antigravity, plan=docs/migration.md
 codex-review this existing plan with the legacy CLI workflow
 codex-build this approved work order with the legacy CLI workflow
 ```
@@ -145,7 +145,7 @@ Plan approval applies only to the exact reviewed plan; any plan edit requires re
 
 A review approval is not proof of exhaustive correctness. The log preserves coverage, limitations, and concrete evidence. Zero findings is valid; a large number of findings is not a quality score. `BLOCKED` and failed reviews are surfaced rather than converted to approval.
 
-The legacy shared CLI runner's approval and sandbox guarantees apply only to its Claude Code/Codex compatibility commands. It cannot launch or enforce Antigravity sessions; follow the [Antigravity workflow contract](skills/claudex-loop/references/antigravity.md) for the main workflow.
+The legacy shared CLI runner's approval and sandbox guarantees apply only to its Claude Code/Codex compatibility commands. It cannot launch or enforce Antigravity sessions; follow the [Antigravity workflow contract](skills/agy-loop/references/antigravity.md) for the main workflow.
 
 ## Development and verification
 
@@ -163,7 +163,7 @@ This repository was previously `grill-me-codex` and `crucible`; GitHub redirects
 
 - Legacy interview skills: © [Matt Pocock](https://github.com/mattpocock/skills), MIT; see their third-party notices.
 - Codex-as-builder pattern adapted from [Peter Steinberger](https://github.com/steipete/agent-scripts).
-- Claudex Loop, cross-model review and packaging: [Chase AI](https://youtube.com/@chaseai).
+- AGY Loop, cross-model review and packaging: [Chase AI](https://youtube.com/@chaseai).
 
 Community reports and proposed fixes from [@darian033](https://github.com/darian033), [@ujconsulting](https://github.com/ujconsulting), [@mraol08831](https://github.com/mraol08831), and [@Dwodgaming](https://github.com/Dwodgaming) informed the bidirectional update. [@tura-ai-agent](https://github.com/tura-ai-agent) contributed the pending Chinese/Japanese translations. See [community acknowledgments and PR reconciliation](ACKNOWLEDGMENTS.md) for what was incorporated, adapted, or remains open.
 

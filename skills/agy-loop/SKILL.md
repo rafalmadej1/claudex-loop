@@ -1,9 +1,9 @@
 ---
-name: claudex-loop
+name: agy-loop
 description: "Plan in Antigravity with Gemini 4 Argon, get independent Claude Opus 5.5 approval, then implement one change at a time with a fresh Opus review after each change."
 ---
 
-# Claudex Loop — Antigravity workflow
+# AGY Loop — Antigravity workflow
 
 Use two separate Antigravity instances for planning and plan review, then implement the approved plan in small steps. Never change the required model or thinking mode silently. The required workflow and plan format are in [the Antigravity reference](references/antigravity.md).
 

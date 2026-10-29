@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Small, standard-library CLI adapter for claudex-loop. Python 3.10+."""
+"""Small, standard-library CLI adapter for agy-loop. Python 3.10+."""
 from __future__ import annotations
 
 import argparse
@@ -483,7 +483,7 @@ def main(argv=None) -> int:
             return 0
         return run(args)
     except (RunError, OSError, ValueError, subprocess.SubprocessError) as exc:
-        print(f"claudex-loop: {exc}", file=sys.stderr)
+        print(f"agy-loop: {exc}", file=sys.stderr)
         return 1
 
 
