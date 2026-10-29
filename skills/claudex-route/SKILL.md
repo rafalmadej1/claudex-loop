@@ -5,7 +5,7 @@ description: "Recommend a model and a scoped handoff for a task in Claude Code o
 
 # Claudex Route
 
-Choose a useful next step for the task: keep it with the current agent, obtain a second opinion, investigate a blocker, or delegate a bounded piece of work. Give a brief recommendation before any requested execution. This skill is self-contained and does not start Claudex Loop, require a formal plan, or create review logs.
+Choose a useful next step for the task: keep it with the current agent, obtain a second opinion, investigate a blocker, or delegate a bounded piece of work. Give a brief recommendation before any requested execution. This skill is self-contained and does not start AGY Loop, require a formal plan, or create review logs.
 
 ## Understand the job
 
@@ -22,7 +22,7 @@ Treat a request for advice as recommendation-only. A request to route and perfor
 | An implementation is ready | Ask another provider to inspect relevant changes against requirements, including test validity |
 | Repeated attempts have failed | Give another provider the reproduction, evidence, and failed approaches; ask for a testable alternative explanation |
 | A separable task has clear inputs and acceptance checks | Delegate that piece to a suitable smaller model and inspect its result |
-| The user wants repeated planning, revision, building, and independent inspection | Recommend Claudex Loop; load that separate skill only if the user requests that workflow |
+| The user wants repeated planning, revision, building, and independent inspection | Recommend AGY Loop; load the separate `agy-loop` skill only if the user requests that workflow |
 
 The current agent keeps the user's requirements and coordinates the work. A different provider offers another perspective, not guaranteed correctness. A cheaper delegate does not need to be a peer reviewer of the entire architecture.
 

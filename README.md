@@ -1,33 +1,35 @@
 <div align="center">
-<img src="assets/logo.svg" alt="CLAUDEX LOOP" width="719">
+<img src="assets/logo.svg" alt="AGY LOOP" width="719">
 
-### Skills for working across Claude Code and Codex.
+### Agent workflow skills for Antigravity, Claude Code, and Codex.
 
 [![Stars](https://img.shields.io/github/stars/chaseai-yt/claudex-loop?style=flat&color=e8590c)](https://github.com/chaseai-yt/claudex-loop/stargazers)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 </div>
 
-This repository contains separate skills for choosing a model, making a one-off handoff, and running a complete development workflow. They share a repository and plugin distribution; **Claudex Route is independent of the Claudex Loop workflow**.
+This repository contains separate skills for choosing a model, making a one-off handoff, and running a complete development workflow. The main AGY Loop workflow uses Antigravity with a fixed Gemini/Claude role pairing. Standalone Claude Code/Codex compatibility commands remain available; **Claudex Route is independent of AGY Loop**.
 
 | Skill | Use it for | Dependencies |
 |---|---|---|
 | [`claudex-route`](skills/claudex-route/SKILL.md) | A model recommendation or one scoped handoff | Self-contained; selected CLI needed only for delegation |
-| [`claudex-loop`](skills/claudex-loop/SKILL.md) | Requirements, plan review, implementation, and final inspection | Both CLIs and Python 3.10+ |
-| [`codex-review`](skills/codex-review/SKILL.md) | Explicit Codex plan-review compatibility command | Shared `claudex-loop` skill |
-| [`codex-build`](skills/codex-build/SKILL.md) | Explicit Codex builder compatibility command | Shared `claudex-loop` skill |
+| [`agy-loop`](skills/agy-loop/SKILL.md) | Antigravity planning, independent plan approval, and one-change-at-a-time implementation/review | Antigravity with the specified models |
+| [`codex-review`](skills/codex-review/SKILL.md) | Legacy Claude Code/Codex CLI plan-review compatibility command | Shared CLI runner, Claude Code, and Codex |
+| [`codex-build`](skills/codex-build/SKILL.md) | Legacy Claude Code/Codex CLI build compatibility command | Shared CLI runner, Claude Code, and Codex |
 
-## Claudex Loop
+## AGY Loop
 
-Claudex Loop gives a plan an independent review before implementation, then gives the code an independent inspection. Your current conversation handles requirements and coordination; the other provider challenges the plan with concrete evidence. The host arbitrates findings, records decisions, and keeps the loop bounded.
+AGY Loop uses dedicated Antigravity roles. Gemini 4 Argon (high thinking) plans; a separate Claude Opus 5.5 (medium thinking) instance approves the plan; Gemini 3.8 Flash (high thinking) implements it. Each developer change is reviewed by a new Claude Opus 5.5 (medium thinking) instance before the next change begins.
 
-| Start here | Requirements and plan | Plan review | Default build | Final inspection |
-|---|---|---|---|---|
-| **Claude Code** | Current Claude session | Codex | Claude | Fresh Codex session |
-| **Codex** | Current Codex session | Claude | Codex | Fresh Claude session |
+| Stage | Antigravity role | Model | Thinking |
+|---|---|---|---|
+| Planning | Planner | Gemini 4 Argon | High |
+| Plan review | Separate reviewer instance | Claude Opus 5.5 | Medium |
+| Implementation | Developer | Gemini 3.8 Flash | High |
+| Each change review | New reviewer instance for that change | Claude Opus 5.5 | Medium |
 
-Choose either builder with `builder=claude` or `builder=codex`. The inspector follows the builder choice and always uses the other provider. If the coordinator takes over fixes, those new edits need another independent inspection. With mixed authorship, the log records who wrote and reviewed each part.
+The plan must name every file and function to edit, specify the expected output/observable behavior of each function, and map each function to a covering test. The developer makes one independently reviewable change, runs its named test, then waits for a fresh Opus review before continuing. Corrections also require a new review instance. See the [complete Antigravity workflow contract](skills/agy-loop/references/antigravity.md).
 
-Model choices remain configurable. Use **Claude Fable 5.1** and **GPT-6 Astra** when selected and available on your accounts, or retain each CLI's configured model. The host UI selection does not automatically change the other CLI's configuration. Requested and observed model information is recorded separately, and there is no silent model/provider fallback.
+Use the required model and thinking mode at every stage. If Antigravity cannot select or verify one, stop and report the blocker; do not silently substitute another model, mode, provider, or CLI.
 
 ## Claudex Route: standalone task routing
 
@@ -41,48 +43,52 @@ claudex-route: Pick a suitable model and have it diagnose this failing test read
 
 For example, Luna may suit a focused fixture-generation task, Sol a bounded implementation, and Astra or Fable a difficult review. These are task-fit recommendations, not a fixed ranking; available models, context, verification, and current pricing matter. Staying with your current model is a valid result. Route is a self-contained instruction skill with no Python dependency; a delegated run requires the selected CLI and account access. It does not use the full loop's approval-binding runner.
 
-Claudex Route runs independently. Use **Claudex Loop** when you want repeated plan review, implementation, and independent inspection.
+Claudex Route runs independently. Use **AGY Loop** when you want repeated plan review, implementation, and independent inspection.
 
-## The Claudex Loop workflow
+## The AGY Loop workflow
 
 ```mermaid
 flowchart LR
-    R[Host scouts code and context] --> Q[Settle material decisions]
-    Q --> P[Write plan and acceptance checks]
-    P --> V[Other provider reviews]
-    V -- Revise --> A[Host arbitrates and updates]
-    A --> V
-    V -- Approved --> B[Authorized builder implements]
-    B --> T[Run proof checks]
-    T --> I[Other provider inspects final code]
-    I --> H[Present diff and remaining findings]
+    R[Gemini 4 Argon: inspect code and all available agents/skills] --> P[Write per-function plan and tests]
+    P --> V[Fresh Claude Opus 5.5: review plan]
+    V -- Revise --> P
+    V -- Approved --> D[Gemini 3.8 Flash: make one planned change]
+    D --> T[Run that change's test]
+    T --> C[New Claude Opus 5.5: review change]
+    C -- Revise --> D
+    C -- Approved --> N{More planned changes?}
+    N -- Yes --> D
+    N -- No --> F[Run full proof and inspect final diff]
 ```
 
-1. **Recon:** inspect existing code and relevant docs, or research greenfield assumptions. Present an assumptions ledger with sources.
-2. **Requirements:** resolve decisions that change the outcome. Batch independent questions, preserve user intent, and write a plan with observable acceptance criteria and proof commands.
-3. **Plan review:** the other provider reads the plan and relevant code, returns evidence-backed findings, and revisits revisions in the same session. Stop at the round budget or an explicit verdict: `APPROVED`, `REVISE`, or `BLOCKED`.
-4. **Build and inspect:** once implementation is authorized, the selected builder works from the plan. Independently run proof checks and inspect the final changes with the other provider in a fresh session.
+1. **Recon:** inspect relevant code and tests. Inventory and use every agent and skill available in the developer environment, including workspace-local `.agent` content; record any invocation limitations.
+2. **Plan:** Gemini 4 Argon writes acceptance criteria, assumptions, risks, proof commands, and a per-function table of files, functions, expected behavior, and covering tests.
+3. **Plan approval:** a separate Claude Opus 5.5 instance reviews the exact plan. Only `APPROVED` permits implementation; a changed plan needs another review.
+4. **Incremental implementation:** Gemini 3.8 Flash makes one planned change and runs its named test. A new Claude Opus 5.5 instance reviews that change. The developer waits for approval before making the next change. Revisions receive another fresh review.
+5. **Final verification:** run full proof commands and inspect the complete diff after all changes pass their individual reviews.
 
-The user controls consequential decisions and authorization. A request to review a plan does not authorize implementation. A request to plan and implement does not need redundant build approval. Commits, pushes and publication follow the user's existing instructions.
+The user controls consequential decisions and authorization. A request to review a plan does not authorize implementation. A request to plan and implement authorizes implementation after the required independent plan approval; no extra user build sign-off is needed unless a material decision remains. Commits, pushes and publication follow the user's existing instructions.
 
-`PLAN.md` records what to build; `PLAN-REVIEW-LOG.md` records the findings, dispositions, models, proof and remaining uncertainty. Both paths are configurable. Detailed CLI diagnostics live in a unique directory outside the target checkout.
+`PLAN.md` records what to build; `PLAN-REVIEW-LOG.md` records agent/skill inventory, findings, dispositions, model/mode selections, per-change tests and reviews, proof, and remaining uncertainty. Both paths are configurable.
 
 ## Install
 
-Both CLIs must be installed and authenticated for the full cross-provider workflow. Python **3.10+** runs the shared adapter; no runtime pip packages or separate API keys are required. Check `codex --version`, `codex login status`, `claude --version` and `claude auth status`. See the [runtime reference](skills/claudex-loop/references/runtime.md) for tested CLI versions and permission boundaries.
+Antigravity must provide the specified models and thinking modes for the full AGY Loop workflow. The separate legacy CLI compatibility commands require Claude Code, Codex, and Python **3.10+**; they do not enforce the Antigravity workflow.
 
 ### Claude Code plugin
 
 ```text
 /plugin marketplace add chaseai-yt/claudex-loop
-/plugin install claudex-loop@claudex-loop
+/plugin install agy-loop@agy-loop
 ```
 
-Use `/claudex-loop:claudex-route` for a lightweight recommendation or one-off handoff, or `/claudex-loop:claudex-loop`, `/claudex-loop:codex-review`, or `/claudex-loop:codex-build` for the existing workflows. Enable marketplace auto-update in the plugin menu if desired.
+Use `/agy-loop:claudex-route` for a lightweight recommendation or one-off handoff. The packaged `codex-review` and `codex-build` skills are legacy CLI compatibility commands. Run the main `agy-loop` workflow from Antigravity after installing it as a workspace skill. Enable marketplace auto-update in the plugin menu if desired.
 
-### Codex or manual skill installation
+### Antigravity, Codex, or manual skill installation
 
-Clone this repository and copy all skill directories together. The compatibility commands share the runtime inside `claudex-loop`; copying an alias alone is insufficient. `claudex-route` can also be installed on its own.
+Clone this repository and copy the skill directories you need. The legacy compatibility commands share the CLI runtime inside `agy-loop`; copying an alias alone is insufficient. `claudex-route` can also be installed on its own.
+
+For Antigravity, install `skills/agy-loop/` as a workspace skill under `.agent/skills/agy-loop/` so its `SKILL.md` and `references/` are available to the planner and developer. Keep `.agent` instructions and available skills in scope for the planner's required inventory.
 
 To install **only Claudex Route**, copy `skills/claudex-route/` into `~/.agents/skills/` for Codex or `~/.claude/skills/` for Claude Code. No other skill from this repository is required. The commands below install the complete collection into both hosts.
 
@@ -93,6 +99,12 @@ cp -R skills/. ~/.agents/skills/
 cp -R skills/. ~/.claude/skills/
 ```
 
+```bash
+# Antigravity — run from the project workspace
+mkdir -p .agent/skills/agy-loop
+cp -R /path/to/claudex-loop/skills/agy-loop/. .agent/skills/agy-loop/
+```
+
 ```powershell
 # Windows PowerShell — run from this repository
 New-Item -ItemType Directory -Force "$env:USERPROFILE\.agents\skills", "$env:USERPROFILE\.claude\skills" | Out-Null
@@ -100,18 +112,18 @@ Copy-Item -Recurse -Force skills\* "$env:USERPROFILE\.agents\skills\"
 Copy-Item -Recurse -Force skills\* "$env:USERPROFILE\.claude\skills\"
 ```
 
-Open a new session to pick up the skills. In Codex, invoke `$claudex-route` for routing, or `$claudex-loop` for the full workflow. In Claude Code, invoke `/claudex-route` or `/claudex-loop` after manual installation. Updates are `git pull` and re-copy. A `.codex-plugin/plugin.json` is also supplied for Codex plugin packaging; manual skill installation does not require adding a marketplace.
+Open a new Antigravity session to pick up the skill and invoke `agy-loop` for the full workflow. In Codex, invoke `$claudex-route` or the explicit compatibility commands; in Claude Code, invoke `/claudex-route` or those compatibility commands. Updates are `git pull` and re-copy. A `.codex-plugin/plugin.json` is also supplied for Codex plugin packaging; manual skill installation does not require adding a marketplace.
 
 ### Examples
 
 ```text
-claudex this feature — plan and implement it
-claudex this plan, mode=review, plan=docs/migration.md, rounds=3
-claudex this feature, builder=codex, reviewer_model=gpt-6-astra
-claudex this feature, builder=claude, reviewer_model=claude-fable-5-1
+agy-loop this feature in Antigravity — plan and implement it using the required roles
+agy-loop this plan in Antigravity, plan=docs/migration.md
+codex-review this existing plan with the legacy CLI workflow
+codex-build this approved work order with the legacy CLI workflow
 ```
 
-The third example starts in Claude Code; the fourth starts in Codex. The host selects the opposite reviewer automatically. `codex-review` remains an explicit Codex review command; `codex-build` remains an explicit Codex builder command. For automatic host-based routing, use `claudex-loop`.
+The first two examples use the main Antigravity workflow. The latter examples are separate Claude Code/Codex CLI compatibility workflows and do not provide the required per-change Antigravity reviews.
 
 ## Controls
 
@@ -120,23 +132,20 @@ The third example starts in Claude Code; the fourth starts in Codex. The host se
 | `mode` | `full` | `review` starts from an existing plan |
 | `plan` / `PLAN_FILE` | `PLAN.md` | Plan path, carried through every phase |
 | `log` / `LOG_FILE` | `PLAN-REVIEW-LOG.md` | Append-only decision log |
-| `builder` | current host | `claude` or `codex` |
-| `reviewer_model`, `builder_model`, `inspector_model` | each CLI's configuration | Explicit per-role model override |
-| `reviewer_effort`, `builder_effort`, `inspector_effort` | each CLI's configuration | Explicit supported reasoning effort |
-| `rounds` / `MAX_ROUNDS` | `5` | Completed plan-review round cap |
-| `MAX_FIX_ROUNDS` | `2` | Build-fix attempt cap |
-| `MAX_INSPECTION_ROUNDS` | `2` | Initial inspection plus one reinspection |
-| `research` | proportionate to task | `none`, `web`, or explicitly authorized `deep` |
-| `inspect` | `on` | `off` is an explicit, logged opt-out |
+| Planner | Gemini 4 Argon, high | Fixed Antigravity role |
+| Plan reviewer | Claude Opus 5.5, medium | Separate Antigravity instance |
+| Developer | Gemini 3.8 Flash, high | Fixed Antigravity role |
+| Change reviewer | Claude Opus 5.5, medium | Fresh Antigravity instance after each developer change |
+| `inspect` | required | Per-change review cannot be disabled |
 | `PROOF_CMD` | from plan/repo | Agreed command that verifies the deliverable |
 
 ## What an approval means
 
-The runner validates a successful CLI turn and a structured review; an empty output file or a session-start event cannot count as approval. The approval records the plan's path and SHA256. Changing the plan invalidates it. Inspections also record the pre-build commit and a fingerprint of the inspected changes, including staged and untracked files. Later code changes need another inspection.
+Plan approval applies only to the exact reviewed plan; any plan edit requires re-approval. Each code review applies only to the change snapshot supplied to that fresh reviewer. Later edits need another review before implementation continues.
 
-A clean structured result does not prove the model is right. The log preserves coverage, limitations and concrete evidence. Zero findings is valid; a large number of findings is not a quality score. `BLOCKED`, execution failures and exhausted round budgets are surfaced rather than converted to approval.
+A review approval is not proof of exhaustive correctness. The log preserves coverage, limitations, and concrete evidence. Zero findings is valid; a large number of findings is not a quality score. `BLOCKED` and failed reviews are surfaced rather than converted to approval.
 
-Codex reviews use the read-only shell sandbox. Claude reviews expose only file reading/search, with customizations disabled and no MCP tools. Codex runs also switch off user plugins, apps and MCP servers, since those act outside the shell sandbox. These boundaries differ: see [runtime details](skills/claudex-loop/references/runtime.md). Builders use bounded permissions, and delegated builds require a clean checkout. A worktree preserves unrelated work; it is not itself a security sandbox.
+The legacy shared CLI runner's approval and sandbox guarantees apply only to its Claude Code/Codex compatibility commands. It cannot launch or enforce Antigravity sessions; follow the [Antigravity workflow contract](skills/agy-loop/references/antigravity.md) for the main workflow.
 
 ## Development and verification
 
@@ -146,7 +155,7 @@ python scripts/validate.py
 python -m unittest discover -s tests -v
 ```
 
-CI runs on Windows, macOS and Linux. Tests cover host routing, both result formats, resumed-session identity, malformed/empty/failed responses, timeout handling, approval invalidation, complete change manifests, and build resumption. Tests use disposable Git repositories and fake CLI processes, without model quota. Live CLI smoke-test results are recorded in [VALIDATION.md](VALIDATION.md).
+CI runs on Windows, macOS and Linux. Existing automated tests cover the legacy shared CLI runner's host routing, result formats, resumed-session identity, malformed/empty/failed responses, timeout handling, approval invalidation, complete change manifests, and build resumption. Tests use disposable Git repositories and fake CLI processes, without model quota. Live CLI smoke-test results are recorded in [VALIDATION.md](VALIDATION.md).
 
 ## History and credits
 
@@ -154,7 +163,7 @@ This repository was previously `grill-me-codex` and `crucible`; GitHub redirects
 
 - Legacy interview skills: © [Matt Pocock](https://github.com/mattpocock/skills), MIT; see their third-party notices.
 - Codex-as-builder pattern adapted from [Peter Steinberger](https://github.com/steipete/agent-scripts).
-- Claudex Loop, cross-model review and packaging: [Chase AI](https://youtube.com/@chaseai).
+- AGY Loop, cross-model review and packaging: [Chase AI](https://youtube.com/@chaseai).
 
 Community reports and proposed fixes from [@darian033](https://github.com/darian033), [@ujconsulting](https://github.com/ujconsulting), [@mraol08831](https://github.com/mraol08831), and [@Dwodgaming](https://github.com/Dwodgaming) informed the bidirectional update. [@tura-ai-agent](https://github.com/tura-ai-agent) contributed the pending Chinese/Japanese translations. See [community acknowledgments and PR reconciliation](ACKNOWLEDGMENTS.md) for what was incorporated, adapted, or remains open.
 

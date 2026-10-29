@@ -13,7 +13,7 @@ import unittest
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
-SPEC = importlib.util.spec_from_file_location("runner", ROOT / "skills/claudex-loop/scripts/runner.py")
+SPEC = importlib.util.spec_from_file_location("runner", ROOT / "skills/agy-loop/scripts/runner.py")
 runner = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(runner)
 SESSION = "12345678-1234-4567-8123-123456789abc"
